@@ -29,7 +29,7 @@ app.post('/send-email', async (req, res) => {
         "id": 227615,
         "username": "stuartsim",
         "resource_state": 2,
-        "text": text // Include the "text" value in the response
+        "text": athleteDetails
       }
     };
 
