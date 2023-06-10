@@ -5,7 +5,9 @@ require('dotenv').config()
 
 const app = express();
 const port = 5050;
+
 app.listen(port, () => console.log(`Server running on port ${port}`));
+app.use(express.json());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
