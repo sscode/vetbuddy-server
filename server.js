@@ -30,23 +30,23 @@ app.post('/send-email', async (req, res) => {
       }
     };
 
-    // const msg = {
-    //   to: 'stuartsim.aus+trainingstats@gmail.com',
-    //   from: 'stuartsim.aus@gmail.com',
-    //   subject: 'TrainingStats Connectin',
-    //   text: JSON.stringify(response.data),
-    //   html: '<strong>' + JSON.stringify(response.data) + '</strong>',
-    // }
+    const msg = {
+      to: 'stuartsim.aus+trainingstats@gmail.com',
+      from: 'stuartsim.aus@gmail.com',
+      subject: 'TrainingStats Connectin',
+      text: JSON.stringify(response.data),
+      html: '<strong>' + JSON.stringify(response.data) + '</strong>',
+    }
 
-    // sgMail
-    //   .send(msg)
-    //   .then(() => {
-    //     console.log('Email sent');
-    //     res.send('Email sent successfully');
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //     res.status(500).send('Error sending email');
-    //   });
+    sgMail
+      .send(msg)
+      .then(() => {
+        console.log('Email sent');
+        res.send('Email sent successfully');
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error sending email');
+      });
 });
 
