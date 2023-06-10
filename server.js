@@ -18,11 +18,16 @@ app.get('/api', async (req, res) => {
 app.get('/send-email', async (req, res) => {
     // const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
 
-    const response = {data: {
+    const { text } = req.body; // Extract "text" from the request body
+
+    const response = {
+      data: {
         "id": 227615,
         "username": "stuartsim",
         "resource_state": 2,
-    }}
+        "text": text // Include the "text" value in the response
+      }
+    };
 
     const msg = {
       to: 'stuartsim.aus+trainingstats@gmail.com',
