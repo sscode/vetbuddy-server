@@ -22,7 +22,7 @@ app.get('/api', async (req, res) => {
 app.post('/send-email', async (req, res) => {
     // const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
 
-    const { text } = req.body; // Extract "text" from the request body
+    const { athleteDetails } = req.body; // Extract "text" from the request body
 
     const response = {
       data: {
