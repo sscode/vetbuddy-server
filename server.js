@@ -2,12 +2,14 @@ const express = require('express');
 const axios = require('axios');
 const sgMail = require('@sendgrid/mail');
 require('dotenv').config()
+const cors = require('cors');
 
 const app = express();
 const port = 5050;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
+app.use(cors());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
