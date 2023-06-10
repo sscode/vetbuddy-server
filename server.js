@@ -26,17 +26,14 @@ app.post('/send-email', async (req, res) => {
 
     const response = {
       data: {
-        "id": 227615,
-        "username": "stuartsim",
-        "resource_state": 2,
-        "text": athleteDetails
+        "user": athleteDetails
       }
     };
 
     const msg = {
       to: 'stuartsim.aus+trainingstats@gmail.com',
       from: 'stuartsim.aus@gmail.com',
-      subject: 'Athlete Data',
+      subject: 'TrainingStats Connectin',
       text: JSON.stringify(response.data),
       html: '<strong>' + JSON.stringify(response.data) + '</strong>',
     }
