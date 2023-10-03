@@ -27,9 +27,9 @@ app.get('/stock', async (req, res) => {
   const symbol = 'AAPL';
   const range = '1y';
 
-  // const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
+  const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
 
-  res.send(token);
+  res.send(response);
 });
 
 
