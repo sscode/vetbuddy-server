@@ -29,8 +29,7 @@ app.get('/stock', async (req, res) => {
 
   const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
 
-  // console.log(response.data);
-  res.send(response);
+  res.send(response.data);
 });
 
 
