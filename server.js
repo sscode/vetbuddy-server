@@ -16,8 +16,20 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 app.get('/api', async (req, res) => {
     res.send('API is running');
-
 });
+
+app.get('/stock', async (req, res) => {
+  const baseUrl = 'https://api.iexcloud.io/v1/data/core/historical_prices/';
+
+  const token = process.env.IEXCLOUD_API_KEY;
+
+  const { symbol, range } = req.query;
+
+  const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
+
+  res.send(response.data);
+});
+
 
 app.post('/send-email', async (req, res) => {
     // const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
