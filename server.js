@@ -21,7 +21,7 @@ app.get('/api', async (req, res) => {
 app.get('/stock', async (req, res) => {
   const baseUrl = 'https://api.iexcloud.io/v1/data/core/historical_prices/';
 
-  // const token = process.env.IEXCLOUD_API_KEY;
+  const token = process.env.IEXCLOUD_API_KEY;
 
   // const { symbol, range } = req.query;
   const symbol = 'AAPL';
@@ -29,7 +29,7 @@ app.get('/stock', async (req, res) => {
 
   // const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
 
-  res.send(baseUrl);
+  res.send(token);
 });
 
 
