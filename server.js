@@ -23,9 +23,7 @@ app.get('/stock', async (req, res) => {
 
   const token = process.env.IEXCLOUD_API_KEY;
 
-  // const { symbol, range } = req.query;
-  const symbol = 'AAPL';
-  const range = '1y';
+  const { symbol, range } = req.query;
 
   const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
 
