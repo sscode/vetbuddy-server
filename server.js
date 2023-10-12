@@ -30,6 +30,19 @@ app.get('/stock', async (req, res) => {
   res.send(response.data);
 });
 
+app.get('stockQuote', async (req, res) => {
+  const baseUrl = 'https://api.iex.cloud/v1/data/core/quote/';
+
+  const token = process.env.IEXCLOUD_API_KEY;
+
+  const { symbolList } = req.query;
+
+  const response = await axios.get(`${baseUrl}${symbolList}?token=${token}`);
+
+  res.send(response.data);
+});
+
+
 
 app.post('/send-email', async (req, res) => {
     // const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
