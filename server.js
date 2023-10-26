@@ -43,45 +43,15 @@ app.get('/stockQuote', async (req, res) => {
   res.send(response.data);
 });
 
-const emailMessage = {
-  to: 'stuartsim.aus+trainingstats@gmail.com',
-  from: 'stuartsim.aus@gmail.com',
-  subject: 'Logging Connection Local',
-  text: 'This is a scheduled email Local.',
-  html: `<strong>${text}</strong>`, // Replace with your email content
-};
-
-// Schedule the email to be sent every 5 minutes
-// cron.schedule('*/1 * * * *', () => {
-//   sgMail
-//     .send(emailMessage)
-//     .then(() => {
-//       console.log('Email sent');
-//     })
-//     .catch((error) => {
-//       console.error('Error sending email:', error);
-//     });
-// });
-
-
-
-// const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
-
-// const { athleteDetails } = req.body; // Extract "text" from the request body
-
-// const response = {
-//   data: {
-//     "user": athleteDetails
-//   }
-// };
 
 app.get('/send-email', async (req, res) => {
   try {
+    const text = 'This is a scheduled email Vercel.';
+
       const msg = {
           to: 'stuartsim.aus+trainingstats@gmail.com',
           from: 'stuartsim.aus@gmail.com',
           subject: 'Logging Connection Vercel',
-          text: 'This is a scheduled email Vercel.', // Replace with your email content
           html: `<strong>${text}</strong>`, // Replace with your email content
       };
 
