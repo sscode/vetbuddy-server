@@ -75,7 +75,7 @@ const emailMessage = {
 //   }
 // };
 
-app.post('/send-email', async (req, res) => {
+app.get('/send-email', async (req, res) => {
   try {
       const msg = {
           to: 'stuartsim.aus+trainingstats@gmail.com',
