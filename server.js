@@ -47,21 +47,21 @@ const emailMessage = {
   to: 'stuartsim.aus+trainingstats@gmail.com',
   from: 'stuartsim.aus@gmail.com',
   subject: 'Logging Connection',
-  text: 'This is a scheduled email Vercel.',
+  text: 'This is a scheduled email Local.',
   html: '<strong>This is a scheduled email.</strong>',
 };
 
 // Schedule the email to be sent every 5 minutes
-cron.schedule('*/1 * * * *', () => {
-  sgMail
-    .send(emailMessage)
-    .then(() => {
-      console.log('Email sent');
-    })
-    .catch((error) => {
-      console.error('Error sending email:', error);
-    });
-});
+// cron.schedule('*/1 * * * *', () => {
+//   sgMail
+//     .send(emailMessage)
+//     .then(() => {
+//       console.log('Email sent');
+//     })
+//     .catch((error) => {
+//       console.error('Error sending email:', error);
+//     });
+// });
 
 
 
@@ -81,7 +81,7 @@ app.post('/send-email', async (req, res) => {
           to: 'stuartsim.aus+trainingstats@gmail.com',
           from: 'stuartsim.aus@gmail.com',
           subject: 'Logging Connection',
-          text: 'This is a scheduled email.', // Replace with your email content
+          text: 'This is a scheduled email Vercel.', // Replace with your email content
           html: '<strong>This is a scheduled email.</strong>', // Replace with your email content
       };
 
