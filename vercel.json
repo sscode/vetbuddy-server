@@ -2,6 +2,6 @@
     "rewrites": [{ "source": "/(.*)", "destination": "/api" }],
     "crons": [{
         "path": "/send-email",
-        "schedule": "24 14 * * *"
+        "schedule": "30 14 * * *"
       }]
 }
