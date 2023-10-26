@@ -47,12 +47,12 @@ const emailMessage = {
   to: 'stuartsim.aus+trainingstats@gmail.com',
   from: 'stuartsim.aus@gmail.com',
   subject: 'Logging Connection',
-  text: 'This is a scheduled email.',
+  text: 'This is a scheduled email Vercel.',
   html: '<strong>This is a scheduled email.</strong>',
 };
 
 // Schedule the email to be sent every 5 minutes
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('*/1 * * * *', () => {
   sgMail
     .send(emailMessage)
     .then(() => {
