@@ -11,7 +11,7 @@ app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
 app.use(cors());
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 app.get('/api', async (req, res) => {
