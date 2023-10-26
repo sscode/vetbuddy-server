@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const sgMail = require('@sendgrid/mail');
+const cron = require('node-cron');
 require('dotenv').config()
 const cors = require('cors');
 
@@ -11,7 +12,7 @@ app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
 app.use(cors());
 
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
 app.get('/api', async (req, res) => {
@@ -42,23 +43,44 @@ app.get('/stockQuote', async (req, res) => {
   res.send(response.data);
 });
 
+const emailMessage = {
+  to: 'stuartsim.aus+trainingstats@gmail.com',
+  from: 'stuartsim.aus@gmail.com',
+  subject: 'Logging Connection',
+  text: 'This is a scheduled email.',
+  html: '<strong>This is a scheduled email.</strong>',
+};
 
+// Schedule the email to be sent every 5 minutes
+cron.schedule('*/5 * * * *', () => {
+  sgMail
+    .send(emailMessage)
+    .then(() => {
+      console.log('Email sent');
+    })
+    .catch((error) => {
+      console.error('Error sending email:', error);
+    });
+});
+
+
+
+// const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
+
+// const { athleteDetails } = req.body; // Extract "text" from the request body
+
+// const response = {
+//   data: {
+//     "user": athleteDetails
+//   }
+// };
 
 app.post('/send-email', async (req, res) => {
-    // const response = await axios.get(`https://www.strava.com/api/v3/athlete?access_token=${accessToken}`);
-
-    const { athleteDetails } = req.body; // Extract "text" from the request body
-
-    const response = {
-      data: {
-        "user": athleteDetails
-      }
-    };
 
     const msg = {
       to: 'stuartsim.aus+trainingstats@gmail.com',
       from: 'stuartsim.aus@gmail.com',
-      subject: 'TrainingStats Connectin',
+      subject: 'Loging Connection',
       text: JSON.stringify(response.data),
       html: '<strong>' + JSON.stringify(response.data) + '</strong>',
     }
