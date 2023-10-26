@@ -76,24 +76,23 @@ cron.schedule('*/5 * * * *', () => {
 // };
 
 app.post('/send-email', async (req, res) => {
+  try {
+      const msg = {
+          to: 'stuartsim.aus+trainingstats@gmail.com',
+          from: 'stuartsim.aus@gmail.com',
+          subject: 'Logging Connection',
+          text: 'This is a scheduled email.', // Replace with your email content
+          html: '<strong>This is a scheduled email.</strong>', // Replace with your email content
+      };
 
-    const msg = {
-      to: 'stuartsim.aus+trainingstats@gmail.com',
-      from: 'stuartsim.aus@gmail.com',
-      subject: 'Loging Connection',
-      text: JSON.stringify(response.data),
-      html: '<strong>' + JSON.stringify(response.data) + '</strong>',
-    }
+      await sgMail.send(msg);
 
-    sgMail
-      .send(msg)
-      .then(() => {
-        console.log('Email sent');
-        res.send('Email sent successfully');
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send('Error sending email');
-      });
+      console.log('Email sent');
+      res.send('Email sent successfully');
+  } catch (error) {
+      console.error('Error sending email:', error);
+      res.status(500).send('Error sending email');
+  }
 });
+
 
