@@ -46,9 +46,9 @@ app.get('/stockQuote', async (req, res) => {
 const emailMessage = {
   to: 'stuartsim.aus+trainingstats@gmail.com',
   from: 'stuartsim.aus@gmail.com',
-  subject: 'Logging Connection',
+  subject: 'Logging Connection Local',
   text: 'This is a scheduled email Local.',
-  html: '<strong>This is a scheduled email.</strong>',
+  html: `<strong>${text}</strong>`, // Replace with your email content
 };
 
 // Schedule the email to be sent every 5 minutes
@@ -80,9 +80,9 @@ app.get('/send-email', async (req, res) => {
       const msg = {
           to: 'stuartsim.aus+trainingstats@gmail.com',
           from: 'stuartsim.aus@gmail.com',
-          subject: 'Logging Connection',
+          subject: 'Logging Connection Vercel',
           text: 'This is a scheduled email Vercel.', // Replace with your email content
-          html: '<strong>This is a scheduled email.</strong>', // Replace with your email content
+          html: `<strong>${text}</strong>`, // Replace with your email content
       };
 
       await sgMail.send(msg);
