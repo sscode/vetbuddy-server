@@ -110,6 +110,7 @@ async function sendEmailToUser(userId) {
     const userDoc = await admin.firestore().collection('users').doc(userId).get();
     let userEmail = userDoc.data().email;
 
+    console.log('userEmail', userEmail);
 
     // Get references to the "portfolios" and "stocks" subcollections
     const portfoliosCollection = admin.firestore().collection('users').doc(userId).collection('portfolios');
