@@ -168,7 +168,7 @@ app.get('/sendEmails', async (req, res) => {
         sendEmailToUser(userId, delay);
         console.log('Email sent to user:', userId);
       }, delay);
-      delay += 5000; // 5 seconds (5000 milliseconds) cooldown between emails
+      delay += 250; // 5 seconds (5000 milliseconds) cooldown between emails
     });
 
     res.send('Emails sent to all users');
