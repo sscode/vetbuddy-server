@@ -56,11 +56,11 @@ app.get('/stockQuote', async (req, res) => {
 
 
 // Define a function to send the email
-async function sendEmail(portfolioData) {
+async function sendEmail(portfolioData, email) {
   try {
     const text = 'This is a scheduled email Vercel.';
     const msg = {
-      to: 'stuartsim.aus+trainingstats@gmail.com',
+      to: email,
       from: 'stuartsim.aus@gmail.com',
       subject: 'Logging Connection Vercel',
       html: generateEmailContent(portfolioData), // Replace with your email content
@@ -100,9 +100,16 @@ function generateEmailContent(portfoliosData) {
 }
 
 // Endpoint to fetch subcollections for a user
-app.get('/user/:userId', async (req, res) => {
+async function sendEmailToUser(userId) {
+
   try {
-    const userId = req.params.userId;
+    // const userId = req.params.userId;
+
+    //get email address
+    // Fetch the user's email from Firestore
+    const userDoc = await admin.firestore().collection('users').doc(userId).get();
+    let userEmail = userDoc.data().email;
+
 
     // Get references to the "portfolios" and "stocks" subcollections
     const portfoliosCollection = admin.firestore().collection('users').doc(userId).collection('portfolios');
@@ -131,15 +138,46 @@ app.get('/user/:userId', async (req, res) => {
       }
     }
 
-    // Send the email
-    await sendEmail(portfoliosData);
+    if(userEmail !== 'stuartsim.aus+firebase@gmail.com'){
+      userEmail = 'stuartsim.aus+alternate@gmail.com'
+    }
 
-    res.json(portfoliosData);
+    // Send the email
+    await sendEmail(portfoliosData, userEmail);
+
+    // res.json(portfoliosData);
   } catch (error) {
     console.error('Error fetching portfolios with alerts:', error);
-    res.status(500).send('Error fetching portfolios with alerts');
+    // res.status(500).send('Error fetching portfolios with alerts');
+  }
+};
+
+// Endpoint to send emails to all users
+app.get('/sendEmails', async (req, res) => {
+  try {
+    // Fetch all user documents from the "users" collection
+    const usersQuerySnapshot = await admin.firestore().collection('users').get();
+
+    // Initialize a delay counter
+    let delay = 0;
+
+    // Iterate over each user document and send an email with a cooldown
+    usersQuerySnapshot.forEach((userDoc) => {
+      const userId = userDoc.id;
+      setTimeout(() => {
+        sendEmailToUser(userId, delay);
+        console.log('Email sent to user:', userId);
+      }, delay);
+      delay += 5000; // 5 seconds (5000 milliseconds) cooldown between emails
+    });
+
+    res.send('Emails sent to all users');
+  } catch (error) {
+    console.error('Error sending emails to all users:', error);
+    res.status(500).send('Error sending emails to all users');
   }
 });
+
 
 
 
