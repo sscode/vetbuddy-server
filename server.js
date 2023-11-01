@@ -78,9 +78,12 @@ async function sendEmail(portfolioData, email) {
 function generateEmailContent(portfoliosData) {
   let emailContent = ''; // Initialize the email content
 
+  const timeStamp = new Date().toISOString();
+
   // Loop through each portfolio in the response
   portfoliosData.forEach((portfolio) => {
     emailContent += `<h2>${portfolio.name}</h2>`; // Portfolio name as a heading
+    emailContent += `<p>Generated at ${timeStamp}</p>`; // Timestamp
     emailContent += '<table border="1">'; // Start a table
 
     // Loop through each stock in the portfolio
