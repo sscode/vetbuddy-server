@@ -78,12 +78,9 @@ async function sendEmail(portfolioData, email) {
 function generateEmailContent(portfoliosData) {
   let emailContent = ''; // Initialize the email content
 
-  const timeStamp = Date.now();
-
   // Loop through each portfolio in the response
   portfoliosData.forEach((portfolio) => {
     emailContent += `<h2>${portfolio.name}</h2>`; // Portfolio name as a heading
-    emailContent += `<p>Time Stamp: ${timeStamp}</p>`; // Portfolio name as a heading
     emailContent += '<table border="1">'; // Start a table
 
     // Loop through each stock in the portfolio
@@ -142,10 +139,6 @@ async function sendEmailToUser(userId) {
       }
     }
 
-    // if(userEmail !== 'stuartsim.aus+firebase@gmail.com'){
-    //   userEmail = 'stuartsim.aus+alternate@gmail.com'
-    // }
-
     // Send the email
     await sendEmail(portfoliosData, userEmail);
 
@@ -156,36 +149,31 @@ async function sendEmailToUser(userId) {
   }
 };
 
-// const endpointPath = `/sendEmails/${Date.now()}`;
-
 // Endpoint to send emails to all users
 app.get('/sendEmails', async (req, res) => {
   try {
-
-    res.setHeader('Cache-Control', 'no-cache');
-
     // Fetch all user documents from the "users" collection
     const usersQuerySnapshot = await admin.firestore().collection('users').get();
 
     // Initialize a delay counter
-    let delay = 0;
-    // Iterate over the documents in the QuerySnapshot
+    const delay = 250;
+
+    
     for(const userDoc of usersQuerySnapshot.docs) {
-      await setTimeout(() => {
-        sendEmailToUser(userDoc.id);
+      setTimeout(async() => {
+        await sendEmailToUser(userDoc.id);
         console.log('Email sent to user:', userDoc.id);
       }, delay);
-      delay += 250; // 5 seconds (5000 milliseconds) cooldown between emails
     }
 
-    const timeStamp = Date.now();
-
-    res.send(`Emails sent to all users at ${timeStamp}`);
+    res.send('Emails sent to all users');
   } catch (error) {
     console.error('Error sending emails to all users:', error);
     res.status(500).send('Error sending emails to all users');
   }
 });
+
+
 
 app.get('/testConnection', async (req, res) => {
   try {
@@ -241,7 +229,3 @@ app.get('/user/:userId', async (req, res) => {
     res.status(500).send('Error fetching portfolios with alerts');
   }
 });
-
-
-
-
