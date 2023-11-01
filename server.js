@@ -103,8 +103,6 @@ function generateEmailContent(portfoliosData) {
 async function sendEmailToUser(userId) {
 
   try {
-    // const userId = req.params.userId;
-
     //get email address
     // Fetch the user's email from Firestore
     const userDoc = await admin.firestore().collection('users').doc(userId).get();
@@ -156,6 +154,9 @@ async function sendEmailToUser(userId) {
 // Endpoint to send emails to all users
 app.get('/sendEmails', async (req, res) => {
   try {
+
+    res.setHeader('Cache-Control', 'no-cache');
+
     // Fetch all user documents from the "users" collection
     const usersQuerySnapshot = await admin.firestore().collection('users').get();
 
@@ -170,7 +171,9 @@ app.get('/sendEmails', async (req, res) => {
       }, delay);
     }
 
-    res.send('Emails sent to all users');
+    const timeStamp = new Date().toISOString();
+
+    res.send(`Emails sent to all users at ${timeStamp}`);
   } catch (error) {
     console.error('Error sending emails to all users:', error);
     res.status(500).send('Error sending emails to all users');
