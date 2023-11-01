@@ -192,6 +192,48 @@ app.get('/testConnection', async (req, res) => {
   }
 });
 
+// Endpoint to fetch subcollections for a user
+app.get('/user/:userId', async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    // Get references to the "portfolios" and "stocks" subcollections
+    const portfoliosCollection = admin.firestore().collection('users').doc(userId).collection('portfolios');
+    const stocksCollection = admin.firestore().collection('users').doc(userId).collection('stocks');
+
+    // Fetch portfolios with emailAlerts set to true
+    const portfoliosQuerySnapshot = await portfoliosCollection.where('emailAlerts', '==', true).get();
+    const portfoliosData = [];
+
+    // Iterate over portfolios with emailAlerts
+    for (const portfolioDoc of portfoliosQuerySnapshot.docs) {
+      const portfolioData = portfolioDoc.data();
+      portfolioData.stocks = [];
+
+      // Fetch associated stocks for this portfolio
+      const stocksQuerySnapshot = await stocksCollection.where('portfolioId', '==', portfolioDoc.id).get();
+      stocksQuerySnapshot.forEach((stockDoc) => {
+        const stockData = stockDoc.data();
+        // Include only basic information for each stock
+        portfolioData.stocks.push({ stock: stockData.stock, quantity: stockData.quantity });
+      });
+
+      // Include portfolio name and associated stocks in the response
+      if (portfolioData.stocks.length > 0) {
+        portfoliosData.push({ name: portfolioData.name, stocks: portfolioData.stocks });
+      }
+    }
+
+    // Send the email
+    await sendEmail(portfoliosData, 'stuartsim.aus+testing@gmail.com');
+
+    res.json(portfoliosData);
+  } catch (error) {
+    console.error('Error fetching portfolios with alerts:', error);
+    res.status(500).send('Error fetching portfolios with alerts');
+  }
+});
+
 
 
 
