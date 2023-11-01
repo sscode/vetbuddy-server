@@ -153,11 +153,12 @@ async function sendEmailToUser(userId) {
   }
 };
 
-const endpointPath = `/sendEmails/${Date.now()}`;
+// const endpointPath = `/sendEmails/${Date.now()}`;
 
 // Endpoint to send emails to all users
-app.get(endpointPath, async (req, res) => {
+app.get('/sendEmails', async (req, res) => {
   try {
+
     res.setHeader('Cache-Control', 'no-cache');
 
     // Fetch all user documents from the "users" collection
@@ -173,10 +174,12 @@ app.get(endpointPath, async (req, res) => {
         sendEmailToUser(userId, delay);
         console.log('Email sent to user:', userId);
       }, delay);
-      delay += 250; // 5 seconds (5000 milliseconds) cooldown between emails
+      delay += 300; // 5 seconds (5000 milliseconds) cooldown between emails
     });
 
-    res.send('Emails sent to all users');
+    const timeStamp = Date.now();
+
+    res.send(`Emails sent to all users at ${timeStamp}`);
   } catch (error) {
     console.error('Error sending emails to all users:', error);
     res.status(500).send('Error sending emails to all users');
