@@ -168,7 +168,7 @@ app.get('/sendEmails', async (req, res) => {
     let delay = 0;
     // Iterate over the documents in the QuerySnapshot
     for(const userDoc of usersQuerySnapshot.docs) {
-      setTimeout(() => {
+      await setTimeout(() => {
         sendEmailToUser(userDoc.id);
         console.log('Email sent to user:', userDoc.id);
       }, delay);
