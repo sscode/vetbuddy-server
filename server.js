@@ -166,15 +166,13 @@ app.get('/sendEmails', async (req, res) => {
 
     // Initialize a delay counter
     let delay = 0;
-
-    // Iterate over each user document and send an email with a cooldown
+    // Iterate over the documents in the QuerySnapshot
     usersQuerySnapshot.forEach((userDoc) => {
-      const userId = userDoc.id;
       setTimeout(() => {
-        sendEmailToUser(userId);
-        console.log('Email sent to user:', userId);
+        console.log('Sending email to user:', userDoc.id);
+        sendEmailToUser(userDoc.id);
       }, delay);
-      delay += 300; // 5 seconds (5000 milliseconds) cooldown between emails
+      delay += 5000; // 5 seconds (5000 milliseconds) cooldown between emails
     });
 
     const timeStamp = Date.now();
