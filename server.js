@@ -179,6 +179,19 @@ app.get('/sendEmails', async (req, res) => {
   }
 });
 
+app.get('/testConnection', async (req, res) => {
+  try {
+    const usersQuerySnapshot = await admin.firestore().collection('users').get();
+
+    console.log('Connection successful: ' + usersQuerySnapshot);
+
+    res.send('Connection successful: ' + usersQuerySnapshot);
+  } catch (error) {
+    console.error('Error connecting', error);
+    res.status(500).send('Error connecting');
+  }
+});
+
 
 
 
