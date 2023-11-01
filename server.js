@@ -156,6 +156,8 @@ async function sendEmailToUser(userId) {
 // Endpoint to send emails to all users
 app.get('/sendEmails', async (req, res) => {
   try {
+    res.setHeader('Cache-Control', 'no-cache');
+    
     // Fetch all user documents from the "users" collection
     const usersQuerySnapshot = await admin.firestore().collection('users').get();
 
