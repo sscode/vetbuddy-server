@@ -139,6 +139,10 @@ async function sendEmailToUser(userId) {
       }
     }
 
+    if(userEmail !== 'stuartsim.aus+firebase@gmail.com'){
+      userEmail = 'stuartsim.aus+alternate@gmail.com'
+    }
+
     // Send the email
     await sendEmail(portfoliosData, userEmail);
 
