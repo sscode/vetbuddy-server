@@ -78,7 +78,18 @@ async function sendEmail(portfolioData, email) {
 
 function generateEmailContent(portfoliosData) {
 
-  const timeStamp = new Date().toISOString();
+  const now = new Date();
+  const options = {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false, // Use 24-hour format
+  };
+  
+  const timeStamp = now.toLocaleDateString('en-US', options);
+  
   const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
 
   // Create an array to store individual table HTML for each portfolio
