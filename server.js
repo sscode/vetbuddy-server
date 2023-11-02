@@ -4,6 +4,7 @@ const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
 require('dotenv').config()
 const cors = require('cors');
+const fs = require('fs');
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
@@ -76,28 +77,52 @@ async function sendEmail(portfolioData, email) {
 }
 
 function generateEmailContent(portfoliosData) {
-  let emailContent = ''; // Initialize the email content
 
   const timeStamp = new Date().toISOString();
+  const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
+
+  // Create an array to store individual table HTML for each portfolio
+  const portfolioTables = [];
 
   // Loop through each portfolio in the response
   portfoliosData.forEach((portfolio) => {
-    emailContent += `<h2>${portfolio.name}</h2>`; // Portfolio name as a heading
-    emailContent += `<p>Generated at ${timeStamp}</p>`; // Timestamp
-    emailContent += '<table border="1">'; // Start a table
+    let tableHTML = `
+    <h1 class="v-font-size" style="margin: 0px; margin-bottom: 12px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">
+    ${portfolio.name}
+    </h1>`
+    ; // Portfolio name as a heading
+    tableHTML += `<p style="margin-bottom: 24px;">Generated at ${timeStamp}</p>`; // Timestamp
+    tableHTML += '<table>'; // Start a table
+
+    // Add a header row
+    tableHTML += `
+      <tr style="">
+        <th style="padding-vertical: 5px; padding-right: 25px; padding-left: 10px; border: none; background-color: #f0f0f0;">Stock</th>
+        <th style="padding-vertical: 5px; padding-right: 25px; padding-left: 10px;border: none; background-color: #f0f0f0;">QTY</th>
+      </tr>
+    `;
 
     // Loop through each stock in the portfolio
     portfolio.stocks.forEach((stock) => {
-      emailContent += `
-        <tr>
-          <td>${stock.stock}</td> <!-- Stock symbol -->
-          <td>${stock.quantity}</td> <!-- Quantity -->
+      tableHTML += `
+        <tr style="border-bottom: 1px solid #ccc;">
+          <td style="padding-vertical: 5px; padding-right: 25px; padding-left: 10px; border: none;">${stock.stock}</td> <!-- Stock symbol -->
+          <td style="padding-vertical: 5px; padding-right: 25px; padding-left: 10px; border: none;">${stock.quantity}</td> <!-- Quantity -->
         </tr>
       `;
     });
 
-    emailContent += '</table>'; // End the table for the portfolio
+    tableHTML += '</table>'; // End the table for the portfolio
+
+    // Push the generated table HTML into the array
+    portfolioTables.push(tableHTML);
   });
+
+  // Join all the portfolio tables into a single string
+  const tableContent = portfolioTables.join('');
+
+  // Replace the placeholder in the email template with the generated table content
+  const emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
 
   return emailContent;
 }
