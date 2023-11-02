@@ -154,8 +154,11 @@ async function sendEmailToUser(userId) {
   }
 };
 
+// Generate a unique endpoint path
+const endpointPath = `/sendEmails/${Date.now()}`;
+
 // Endpoint to send emails to all users
-app.get('/sendEmails', async (req, res) => {
+app.get(endpointPath, async (req, res) => {
   try {
 
     res.setHeader('Cache-Control', 'no-cache');
