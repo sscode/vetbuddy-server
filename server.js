@@ -59,11 +59,10 @@ app.get('/stockQuote', async (req, res) => {
 // Define a function to send the email
 async function sendEmail(portfolioData, email) {
   try {
-    const text = 'This is a scheduled email Vercel.';
     const msg = {
       to: email,
       from: 'stuartsim.aus@gmail.com',
-      subject: 'Logging Connection Vercel',
+      subject: 'Finlister Portfolio Update',
       html: generateEmailContent(portfolioData), // Replace with your email content
     };
 
@@ -83,13 +82,11 @@ function generateEmailContent(portfoliosData) {
     year: '2-digit',
     month: '2-digit',
     day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
     hour12: false, // Use 24-hour format
   };
   
   const timeStamp = now.toLocaleDateString('en-US', options);
-  
+
   const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
 
   // Create an array to store individual table HTML for each portfolio
