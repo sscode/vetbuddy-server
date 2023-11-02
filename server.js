@@ -87,12 +87,12 @@ function generateEmailContent(portfoliosData) {
   // Loop through each portfolio in the response
   portfoliosData.forEach((portfolio) => {
     let tableHTML = `
-    <h1 class="v-font-size" style="margin: 0px; margin-bottom: 12px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">
+    <h1 class="v-font-size" style="margin: 0px; margin-bottom: 2px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 22px; font-weight: 400;">
     ${portfolio.name}
     </h1>`
     ; // Portfolio name as a heading
     tableHTML += `<p style="margin-bottom: 24px;">Generated at ${timeStamp}</p>`; // Timestamp
-    tableHTML += '<table>'; // Start a table
+    tableHTML += '<table style="margin-bottom: 24px">'; // Start a table
 
     // Add a header row
     tableHTML += `
