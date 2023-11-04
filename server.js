@@ -4,9 +4,10 @@ const axios = require('axios');
 require('dotenv').config()
 const cors = require('cors');
 const fs = require('fs');
-const { sendEmailToUser } = require('./emails');
+const { sendEmailToUser, sendEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
+const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
@@ -134,10 +135,28 @@ app.get('/user/:userId', async (req, res) => {
       }
     }
 
-    // Send the email
-    await sendEmail(portfoliosData, 'stuartsim.aus+testing@gmail.com');
+    //get unique stocks from portfolios
+    let uniqueStocks = [];
+    portfoliosData.forEach(portfolio => {
+      portfolio.stocks.forEach(stock => {
+        if(!uniqueStocks.includes(stock.stock)){
+          uniqueStocks.push(stock.stock);
+        }
+      })
+    })
 
-    res.json(portfoliosData);
+    // console.log(portfoliosData);
+
+    //get stock quotes
+    const quoteFull = await fetchHistoricalStockData(uniqueStocks, '95d');
+
+    // add stock quotes to portfoliosData
+    const portfolioDataTable = combineQuotesWithPortfolios(quoteFull, portfoliosData);
+
+    // Send the email
+    await sendEmail(portfolioDataTable, sgMail, 'stuartsim.aus+testing@gmail.com');
+
+    res.json('Email sent: ');
   } catch (error) {
     console.error('Error fetching portfolios with alerts:', error);
     res.status(500).send('Error fetching portfolios with alerts');
