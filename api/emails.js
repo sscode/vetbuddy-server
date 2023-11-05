@@ -1,5 +1,8 @@
 //emails.js
 const fs = require('fs');
+const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
+//add css
+
 
     // Define a function to send the email
     async function sendEmail(portfolioData, sgMail, email) {
@@ -128,13 +131,31 @@ const fs = require('fs');
           portfoliosData.push({ name: portfolioData.name, stocks: portfolioData.stocks });
         }
       }
+
+      //get unique stocks from portfolios
+      let uniqueStocks = [];
+      portfoliosData.forEach(portfolio => {
+        portfolio.stocks.forEach(stock => {
+          if(!uniqueStocks.includes(stock.stock)){
+            uniqueStocks.push(stock.stock);
+          }
+        })
+      })
+
+      // console.log(portfoliosData);
+
+      //get stock quotes
+      const quoteFull = await fetchHistoricalStockData(uniqueStocks, '95d');
+
+      // add stock quotes to portfoliosData
+      const portfolioDataTable = combineQuotesWithPortfolios(quoteFull, portfoliosData);
   
       if(userEmail !== 'stuartsim.aus+firebase@gmail.com'){
         userEmail = 'stuartsim.aus+alternate@gmail.com'
       }
   
       // Send the email
-      await sendEmail(portfoliosData, sgMail, userEmail);
+      await sendEmail(portfolioDataTable, sgMail, userEmail);
   
       // res.json(portfoliosData);
     } catch (error) {
