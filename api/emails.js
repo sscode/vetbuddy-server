@@ -47,35 +47,35 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
         ${portfolio.name}
         </h1>
         `; // Portfolio name as a heading
-        tableHTML += `<p style="margin-bottom: 24px;">Generated at ${timeStamp}</p>`; // Timestamp
+        tableHTML += `<p style="margin-bottom: 24px; text-align: left;">Generated at ${timeStamp}</p>`; // Timestamp
         tableHTML += '<table style="margin-bottom: 24px">'; // Start a table
     
         // Add a header row
         tableHTML += `
           <tr style="">
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none; background-color: #f0f0f0;">Stock</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">QTY</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">Weight (%)</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">Latest Price</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">Total Value</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">Yesterday (%)</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">30 Days (%)</th>
-            <th style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px;border: none; background-color: #f0f0f0;">90 Days (%)</th>
+            <th class="th-header">Stock</th>
+            <th class="th-header">QTY</th>
+            <th class="th-header">Latest Price</th>
+            <th class="th-header">Weight (%)</th>
+            <th class="th-header">Total Value</th>
+            <th class="th-header">Yesterday (%)</th>
+            <th class="th-header">30 Days (%)</th>
+            <th class="th-header">90 Days (%)</th>
           </tr>
         `;
     
         // Loop through each stock in the portfolio
         portfolio.stocks.forEach((stock) => {
           tableHTML += `
-            <tr style="border-bottom: 1px solid #ccc;">
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.symbol}</td> <!-- Stock symbol -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.quantity}</td> <!-- Quantity -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.weight.toFixed(0)}%</td> <!-- Weight -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">$${stock.latestPrice}</td> <!-- Latest Price -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">$${stock.totalValue.toFixed(0)}</td> <!-- Total Value -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.PriceChangePercentageYesterday.toFixed(2)}%</td> <!-- Price Change Yesterday (%) -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.PriceChangePercentageThirty.toFixed(2)}%</td> <!-- Price Change Last 30 Days (%) -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.PriceChangePercentageNinety.toFixed(2)}%</td> <!-- Price Change Last 90 Days (%) -->
+            <tr style="border-bottom: 1px solid #f0f0f0;">
+              <td class="td-cell td-stock">${stock.symbol}</td> <!-- Stock symbol -->
+              <td class="td-cell">${stock.quantity}</td> <!-- Quantity -->
+              <td class="td-cell">$${stock.latestPrice}</td> <!-- Latest Price -->
+              <td class="td-cell">${stock.weight.toFixed(0)}%</td> <!-- Weight -->
+              <td class="td-cell">$${stock.totalValue.toFixed(0)}</td> <!-- Total Value -->
+              <td class="td-cell">${stock.PriceChangePercentageYesterday.toFixed(2)}%</td> <!-- Price Change Yesterday (%) -->
+              <td class="td-cell">${stock.PriceChangePercentageThirty.toFixed(2)}%</td> <!-- Price Change Last 30 Days (%) -->
+              <td class="td-cell">${stock.PriceChangePercentageNinety.toFixed(2)}%</td> <!-- Price Change Last 90 Days (%) -->
             </tr>
           `;
         });

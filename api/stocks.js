@@ -60,8 +60,6 @@ function combineQuotesWithPortfolios(stockQuotes, portfolios) {
       portfolioWithQuotes.forEach(position => {
         position.weight = position.totalValue / totalPortfolioValue * 100;
       });
-
-      console.log(portfolioWithQuotes);
   
       return {
         ...portfolio,
