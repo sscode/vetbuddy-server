@@ -70,7 +70,7 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
             <tr style="border-bottom: 1px solid #ccc;">
               <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.symbol}</td> <!-- Stock symbol -->
               <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.quantity}</td> <!-- Quantity -->
-              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.weight.toFixed(2)}%</td> <!-- Weight -->
+              <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.weight.toFixed(0)}%</td> <!-- Weight -->
               <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">$${stock.latestPrice}</td> <!-- Latest Price -->
               <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">$${stock.totalValue.toFixed(0)}</td> <!-- Total Value -->
               <td style="font-size: 12px; padding-vertical: 5px; padding-right: 8px; padding-left: 5px; border: none;">${stock.PriceChangePercentageYesterday.toFixed(2)}%</td> <!-- Price Change Yesterday (%) -->
@@ -141,8 +141,6 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
           }
         })
       })
-
-      // console.log(portfoliosData);
 
       //get stock quotes
       const quoteFull = await fetchHistoricalStockData(uniqueStocks, '95d');

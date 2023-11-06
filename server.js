@@ -94,7 +94,7 @@ app.get('/testConnection', async (req, res) => {
   try {
     const usersQuerySnapshot = await admin.firestore().collection('users').get();
 
-    console.log('Connection successful: ' + usersQuerySnapshot);
+    // console.log('Connection successful: ' + usersQuerySnapshot);
 
     res.send('Connection successful: ' + usersQuerySnapshot);
   } catch (error) {
@@ -135,7 +135,7 @@ app.get('/user/:userId', async (req, res) => {
       }
     }
 
-    //get unique stocks from portfolios
+    // get unique stocks from portfolios
     let uniqueStocks = [];
     portfoliosData.forEach(portfolio => {
       portfolio.stocks.forEach(stock => {
@@ -145,18 +145,16 @@ app.get('/user/:userId', async (req, res) => {
       })
     })
 
-    // console.log(portfoliosData);
-
-    //get stock quotes
+    // get stock quotes
     const quoteFull = await fetchHistoricalStockData(uniqueStocks, '95d');
 
-    // add stock quotes to portfoliosData
+    // // add stock quotes to portfoliosData
     const portfolioDataTable = combineQuotesWithPortfolios(quoteFull, portfoliosData);
 
     // Send the email
     await sendEmail(portfolioDataTable, sgMail, 'stuartsim.aus+testing@gmail.com');
 
-    res.json('Email sent: ');
+    res.json('Email sent.');
   } catch (error) {
     console.error('Error fetching portfolios with alerts:', error);
     res.status(500).send('Error fetching portfolios with alerts');
