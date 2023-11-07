@@ -1,18 +1,16 @@
 //emails.js
 const fs = require('fs');
 const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
-//add css
-
 
     // Define a function to send the email
-    async function sendEmail(portfolioData, sgMail, email) {
+    async function sendEmail(sgMail, email, subject, content) {
 
         try {
         const msg = {
             to: email,
             from: 'stuartsim.aus@gmail.com',
-            subject: 'Finlister Portfolio Update',
-            html: generateEmailContent(portfolioData), // Replace with your email content
+            subject: subject,
+            html: content,
         };
     
         await sgMail.send(msg);
@@ -154,9 +152,13 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
       if(userEmail !== 'stuartsim.aus+firebase@gmail.com'){
         userEmail = 'stuartsim.aus+alternate@gmail.com'
       }
+
+      // Generate the email content
+      const emailData = generateEmailContent(portfolioDataTable)
+      const emailSubject = 'Finlister - Your Portfolio Summary'
   
       // Send the email
-      await sendEmail(portfolioDataTable, sgMail, userEmail);
+      await sendEmail(sgMail, userEmail, emailSubject, emailData);
   
       // res.json(portfoliosData);
     } catch (error) {
@@ -165,4 +167,23 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
     }
   };
 
-  module.exports = { sendEmailToUser, sendEmail };
+  //send welcome email
+  async function sendWelcomeEmail(sgMail, userEmail) {
+
+    const subject = 'Welcome to Finlister';
+
+    const tableContent = `<p>Welcome to Finlister. Please confirm your email.</p>`
+    const subtext = `Welcome to the best way to view your portfolio.`
+
+
+    const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
+
+    const emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
+    const emailContent2 = emailContent.replace('%SUB_TEXT%', subtext);
+
+
+    await sendEmail(sgMail, userEmail, subject, emailContent2);
+    
+    }
+
+  module.exports = { sendEmailToUser, sendEmail, sendWelcomeEmail };

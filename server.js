@@ -4,7 +4,7 @@ const axios = require('axios');
 require('dotenv').config()
 const cors = require('cors');
 const fs = require('fs');
-const { sendEmailToUser, sendEmail } = require('./api/emails');
+const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
 const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
@@ -61,6 +61,15 @@ app.get('/stockDate', async (req, res) => {
 
   res.send(response.data);
 });
+
+app.get('/sendWelcomeEmail', async (req, res) => {
+
+  const { email } = req.query;
+  // const email = 'stuartsim.aus+welcome@gmail.com'
+
+  await sendWelcomeEmail(sgMail, email);
+  res.send('Welcome email sent.');
+})
 
 // Endpoint to send emails to all users
 app.get('/sendEmails', async (req, res) => {
@@ -161,4 +170,6 @@ app.get('/user/:userId', async (req, res) => {
     res.status(500).send('Error fetching portfolios with alerts');
   }
 });
+
+
 
