@@ -88,11 +88,14 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
     
       // Join all the portfolio tables into a single string
       const tableContent = portfolioTables.join('');
+
+      const subtext = `View your portfolios and stocks here.`
     
       // Replace the placeholder in the email template with the generated table content
       const emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
+      const emailContent2 = emailContent.replace('%SUB_TEXT%', subtext);
     
-      return emailContent;
+      return emailContent2;
     }
     
   

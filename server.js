@@ -46,18 +46,21 @@ app.get('/stock', async (req, res) => {
   res.send(response.data);
 });
 
-app.get('/stockQuote', async (req, res) => {
-  const baseUrl = 'https://api.iex.cloud/v1/data/core/quote/';
+app.get('/stockDate', async (req, res) => {
+  const baseUrl = 'https://cloud.iexapis.com/stable/stock/';
+  // 'AAPL/chart/date/20211029?chartByDay=true&token=pk_12493ac929dc4aca8b9ca87d35fefc39';
 
   const token = process.env.IEXCLOUD_API_KEY;
 
-  const { symbolList } = req.query;
+  // const { symbol, date } = req.query;
 
-  const response = await axios.get(`${baseUrl}${symbolList}?token=${token}`);
+  const symbol = 'AAPL';
+  const date = '20210104';
+
+  const response = await axios.get(`${baseUrl}${symbol}/chart/date/${date}?chartByDay=true&token=${token}`);
 
   res.send(response.data);
 });
-
 
 // Endpoint to send emails to all users
 app.get('/sendEmails', async (req, res) => {
@@ -87,8 +90,6 @@ app.get('/sendEmails', async (req, res) => {
     res.status(500).send('Error sending emails to all users');
   }
 });
-
-
 
 app.get('/testConnection', async (req, res) => {
   try {
@@ -160,3 +161,4 @@ app.get('/user/:userId', async (req, res) => {
     res.status(500).send('Error fetching portfolios with alerts');
   }
 });
+
