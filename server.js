@@ -68,7 +68,8 @@ app.get('/sendWelcomeEmail', async (req, res) => {
   // const email = 'stuartsim.aus+welcome@gmail.com'
 
   await sendWelcomeEmail(sgMail, email);
-  res.send('Welcome email sent.');
+
+  res.send('Welcome email sent to ' + email);
 })
 
 // Endpoint to send emails to all users
@@ -82,7 +83,6 @@ app.get('/sendEmails', async (req, res) => {
 
     // Initialize a delay counter
     const delay = 250;
-
     
     for(const userDoc of usersQuerySnapshot.docs) {
       setTimeout(async() => {
