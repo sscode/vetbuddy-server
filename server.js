@@ -42,14 +42,15 @@ app.post('/create-checkout-session', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Annual Subscription',
+            name: 'Annual Payment',
           },
           unit_amount: 2900,
+
         },
         quantity: 1,
       },
     ],
-    mode: 'subscription',
+    mode: 'payment',
     success_url: 'https://www.finlister.com/success',
     cancel_url: 'https://www.finlister.com/cancel',
   });
