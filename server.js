@@ -39,7 +39,7 @@ app.get('/api', async (req, res) => {
     res.send('API is running');
 });
 
-router.post('/create-checkout-session', async (req, res) => {
+app.post('/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
