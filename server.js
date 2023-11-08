@@ -38,14 +38,14 @@ app.get('/api', async (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
-  const { uid } = req.body
-  // Create a Stripe customer with the UID as the description
-  const customer = await stripe.customers.create({
-    description: uid,
-  });
+  // const { uid } = req.body
+  // // Create a Stripe customer with the UID as the description
+  // const customer = await stripe.customers.create({
+  //   description: uid,
+  // });
 
   const session = await stripe.checkout.sessions.create({
-    customer: customer.id,
+    // customer: customer.id,
     line_items: [
       {
         price: 'prod_OyDINpJTInrPs3',
