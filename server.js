@@ -52,7 +52,7 @@ app.post('/create-checkout-session', async (req, res) => {
         quantity: 1,
       },
     ],
-    mode: 'subsciption',
+    mode: 'subscription',
     success_url: 'https://www.finlister.com/success',
     cancel_url: 'https://www.finlister.com/upgrade',
   });
