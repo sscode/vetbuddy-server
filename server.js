@@ -43,18 +43,11 @@ app.post('/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'Annual Payment',
-          },
-          unit_amount: 2900,
-
-        },
+        price: 'prod_OyDINpJTInrPs3',
         quantity: 1,
       },
     ],
-    mode: 'payment',
+    mode: 'subsciption',
     success_url: 'https://www.finlister.com/app',
     cancel_url: 'https://www.finlister.com/upgrade',
   });
