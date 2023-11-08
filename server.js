@@ -7,6 +7,7 @@ const fs = require('fs');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
 
 // Initialize Firebase Admin SDK
@@ -32,6 +33,28 @@ app.use(cors());
 
 app.get('/api', async (req, res) => {
     res.send('API is running');
+});
+
+app.post('/create-checkout-session', async (req, res) => {
+  const session = await stripe.checkout.sessions.create({
+    line_items: [
+      {
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Annual Subscription',
+          },
+          unit_amount: 2900,
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: 'https://www.finlister.com/success',
+    cancel_url: 'https://www.finlister.com/cancel',
+  });
+
+  res.redirect(303, session.url);
 });
 
 app.get('/stock', async (req, res) => {
