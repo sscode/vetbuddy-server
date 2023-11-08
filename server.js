@@ -48,11 +48,18 @@ app.post('/create-checkout-session', async (req, res) => {
     // customer: customer.id,
     line_items: [
       {
-        price: 'prod_OyDINpJTInrPs3',
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Annual Payment',
+          },
+          unit_amount: 2900,
+
+        },
         quantity: 1,
       },
     ],
-    mode: 'subscription',
+    mode: 'payment',
     success_url: 'https://www.finlister.com/success',
     cancel_url: 'https://www.finlister.com/upgrade',
   });
