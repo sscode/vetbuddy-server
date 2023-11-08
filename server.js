@@ -23,8 +23,6 @@ admin.initializeApp({
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-const router = express.Router();
-
 
 const app = express();
 const port = 5050;
@@ -40,7 +38,13 @@ app.get('/api', async (req, res) => {
 });
 
 app.post('/create-checkout-session', async (req, res) => {
+  // Create a Stripe customer with the UID as the description
+  const customer = await stripe.customers.create({
+    description: uid,
+  });
+
   const session = await stripe.checkout.sessions.create({
+    customer: customer.id,
     line_items: [
       {
         price: 'prod_OyDINpJTInrPs3',
@@ -48,11 +52,46 @@ app.post('/create-checkout-session', async (req, res) => {
       },
     ],
     mode: 'subsciption',
-    success_url: 'https://www.finlister.com/app',
+    success_url: 'https://www.finlister.com/success',
     cancel_url: 'https://www.finlister.com/upgrade',
   });
 
   res.send({url: session.url});
+});
+
+// Handle Stripe webhook for payment success
+app.post('/stripe-success', async (req, res) => {
+  try {
+    const event = req.body;
+
+    // Verify the event to ensure it's from Stripe
+    const stripeEvent = stripe.webhooks.constructEvent(
+      req.rawBody,
+      req.headers['stripe-signature'],
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+
+    if (stripeEvent.type === 'checkout.session.completed') {
+      const session = stripeEvent.data.object;
+
+      // Extract the Stripe customer ID from the session
+      const customerId = session.customer;
+
+      // Find the user's Firestore document by the Stripe customer ID
+      const userDocRef = admin.firestore().collection('users').doc(customerId);
+
+      // Update the "premium" field in the Firestore document
+      await userDocRef.update({ premium: true });
+
+      // Respond to the webhook request
+      res.status(200).send('Payment success webhook received and user updated to premium.');
+    } else {
+      res.status(400).send('Invalid webhook event type.');
+    }
+  } catch (error) {
+    console.error('Stripe webhook error:', error);
+    res.status(500).send('Error processing Stripe webhook.');
+  }
 });
 
 app.get('/stock', async (req, res) => {
