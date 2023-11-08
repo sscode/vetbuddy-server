@@ -7,7 +7,7 @@ const fs = require('fs');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const Stripe = require('stripe');
 const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
 
 // Initialize Firebase Admin SDK
@@ -22,6 +22,10 @@ admin.initializeApp({
 });
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const router = express.Router();
+
+
 const app = express();
 const port = 5050;
 
@@ -35,7 +39,7 @@ app.get('/api', async (req, res) => {
     res.send('API is running');
 });
 
-app.post('/create-checkout-session', async (req, res) => {
+router.post('/create-checkout-session', async (req, res) => {
   const session = await stripe.checkout.sessions.create({
     line_items: [
       {
@@ -51,8 +55,8 @@ app.post('/create-checkout-session', async (req, res) => {
       },
     ],
     mode: 'payment',
-    success_url: 'https://www.finlister.com/success',
-    cancel_url: 'https://www.finlister.com/cancel',
+    success_url: 'https://www.finlister.com/app',
+    cancel_url: 'https://www.finlister.com/upgrade',
   });
 
   res.redirect(303, session.url);
