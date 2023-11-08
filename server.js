@@ -54,6 +54,11 @@ app.post('/create-checkout-session', async (req, res) => {
             name: 'Annual Payment',
           },
           unit_amount: 2900,
+          recurring: {
+            interval: 'year',
+
+          }
+
 
         },
         quantity: 1,
