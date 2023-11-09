@@ -7,6 +7,7 @@ const fs = require('fs');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
+const bodyParser = require('body-parser');
 const Stripe = require('stripe');
 const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
 
