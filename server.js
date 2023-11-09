@@ -24,12 +24,14 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
+
 const app = express();
 const port = 5050;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 
 
@@ -79,7 +81,7 @@ app.post('/stripe-success', async (req, res) => {
 
     // Verify the event to ensure it's from Stripe
     const stripeEvent = stripe.webhooks.constructEvent(
-      req.rawBody,
+      JSON.stringify(event), // Pass the parsed JSON body
       req.headers['stripe-signature'],
       process.env.STRIPE_WEBHOOK_SECRET
     );
