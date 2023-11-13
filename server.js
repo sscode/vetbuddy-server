@@ -54,7 +54,7 @@ app.post('/create-checkout-session', async (req, res) => {
         price_data: {
           currency: 'usd',
           product_data: {
-            name: 'Annual Payment',
+            name: 'Annual Plan',
           },
           unit_amount: 2900,
           recurring: {
