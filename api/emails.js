@@ -182,8 +182,8 @@ const header = require('../templates/header');
 
     let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
     //add in header and footer
-    emailContent = emailContent.replace('%HEADER%', header);
-    emailContent = emailContent.replace('%FOOTER%', footer);
+    emailContent = emailContent.replace('%HEADER_CONTENT%', header);
+    emailContent = emailContent.replace('%FOOTER_CONTENT%', footer);
     emailContent = emailContent.replace('%SUB_TEXT%', subtext);
 
 
