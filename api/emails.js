@@ -177,12 +177,17 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
 
 
     const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
+    const headerTemplate = fs.readFileSync('templates/header.html', 'utf8'); // Read full email template from file
+    const footerTemplate = fs.readFileSync('templates/footer.html', 'utf8'); // Read full email template from file
 
-    const emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
-    const emailContent2 = emailContent.replace('%SUB_TEXT%', subtext);
+    let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
+    //add in header and footer
+    emailContent = emailContent.replace('%HEADER%', headerTemplate);
+    emailContent = emailContent.replace('%FOOTER%', footerTemplate);
+    emailContent = emailContent.replace('%SUB_TEXT%', subtext);
 
 
-    await sendEmail(sgMail, userEmail, subject, emailContent2);
+    await sendEmail(sgMail, userEmail, subject, emailContent);
     
     }
 
