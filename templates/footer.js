@@ -1,4 +1,4 @@
-export const footer = `<tbody>
+const footer = `<tbody>
     <tr>
         <td>
             <table width="100%" style="width: 166px; margin: auto;" align="center" role="presentation" cellpadding="0" cellspacing="0" border="0">
@@ -9,4 +9,6 @@ export const footer = `<tbody>
             <p style="font-size: 13px; line-height: 24px; margin: 0; color: #AFAFAF; text-align: center;">Finlister, INC.</p>
         </td>
     </tr>
-</tbody>`
+</tbody>`;
+
+module.exports = footer;
