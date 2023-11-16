@@ -1,5 +1,5 @@
 const footer = `
-                <table style="padding-top: 22px; padding-bottom: 22px;" align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
+                <table style="padding-top: 22px; padding-bottom: 22px;" background-color: #F7F7F7; align="center" border="0" cellpadding="0" cellspacing="0" role="presentation" width="100%">
                     <tbody>
                         <tr>
                             <td>

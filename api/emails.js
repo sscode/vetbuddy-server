@@ -3,6 +3,7 @@ const fs = require('fs');
 const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
 const footer = require('../templates/footer');
 const header = require('../templates/header');
+const welcome = require('../templates/welcome');
 
     // Define a function to send the email
     async function sendEmail(sgMail, email, subject, content) {
@@ -173,14 +174,12 @@ const header = require('../templates/header');
   async function sendWelcomeEmail(sgMail, userEmail) {
 
     const subject = 'Welcome to Finlister';
-
-    const tableContent = `<p>Welcome to Finlister. Please confirm your email.</p>`
     const subtext = `Welcome to the best way to view your portfolio.`
 
 
     const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
 
-    let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
+    let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', welcome);
     //add in header and footer
     emailContent = emailContent.replace('%HEADER_CONTENT%', header);
     emailContent = emailContent.replace('%FOOTER_CONTENT%', footer);
