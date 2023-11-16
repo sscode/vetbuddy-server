@@ -5,14 +5,17 @@ const welcome = `
             <td>
                 <p class="subtext subtextBold">Thanks for joining. We can’t wait to help
                 you on your financial journey.</p>
-                <p class="subtext subtextBold">Please verify your email.</p>
+                <p class="subtext subtextBold"
+                style="margin-top: 12px;"
+                >Please verify your email.</p>
                 <button
                 style="margin-top: 12px; 
                 background-color: #dfdfdf; 
                 color: #000; 
                 border: none; 
                 padding: 8px 36px; 
-                border-radius: 30"
+                border-radius: 5px;
+                "
                 >Confirm</button>
             </td>
         </tr>
