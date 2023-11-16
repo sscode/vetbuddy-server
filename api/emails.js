@@ -1,6 +1,8 @@
 //emails.js
 const fs = require('fs');
 const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
+import { header } from './templates/header';
+import { footer } from './templates/footer';
 
     // Define a function to send the email
     async function sendEmail(sgMail, email, subject, content) {
@@ -182,8 +184,8 @@ const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./sto
 
     let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
     //add in header and footer
-    emailContent = emailContent.replace('%HEADER%', headerTemplate);
-    emailContent = emailContent.replace('%FOOTER%', footerTemplate);
+    emailContent = emailContent.replace('%HEADER%', header);
+    emailContent = emailContent.replace('%FOOTER%', footer);
     emailContent = emailContent.replace('%SUB_TEXT%', subtext);
 
 
