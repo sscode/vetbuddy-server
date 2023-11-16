@@ -1,8 +1,8 @@
 //emails.js
 const fs = require('fs');
 const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
-import { header } from './templates/header';
-import { footer } from './templates/footer';
+const footer = require('./templates/footer');
+const header = require('./templates/header');
 
     // Define a function to send the email
     async function sendEmail(sgMail, email, subject, content) {
