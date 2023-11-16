@@ -179,8 +179,6 @@ const header = require('../templates/header');
 
 
     const fullEmailTemplate = fs.readFileSync('templates/index.html', 'utf8'); // Read full email template from file
-    const headerTemplate = fs.readFileSync('templates/header.html', 'utf8'); // Read full email template from file
-    const footerTemplate = fs.readFileSync('templates/footer.html', 'utf8'); // Read full email template from file
 
     let emailContent = fullEmailTemplate.replace('%TABLE_CONTENT%', tableContent);
     //add in header and footer
