@@ -3,9 +3,14 @@ const welcome = `
     <tbody>
         <tr>
             <td>
-                <p class="subtext">Please confirm your email to receive your portfolio updates.</p>
+                <p class="subtext subtextBold">Please confirm your email to receive your portfolio updates.</p>
                 <button
-                style="margin-top: 12px; background-color: #000; color: #F7F7F7; border: none; padding: 12px 24px; border-radius: 4"
+                style="margin-top: 12px; 
+                background-color: #c4c2c2; 
+                color: #000; 
+                border: none; 
+                padding: 12px 24px; 
+                border-radius: 10"
                 >Confirm</button>
             </td>
         </tr>
