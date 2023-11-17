@@ -6,11 +6,11 @@ const footer = `
                 <p 
                 style="color: #000;"
                 class="section-heading">Finlister.com</p>
-                <table width="100%" style="margin: auto; padding-top: 12px;" align="center" role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <table width="10%" style="margin: auto;" align="center" role="presentation" cellpadding="0" cellspacing="0" border="0">
                     <tbody>
                         <tr>
-                            <td><a target="_blank" href="https://www.linkedin.com/in/simstuart"><img src="https://res.cloudinary.com/dfvcq2b/image/upload/v1699288939/image-1_vhaoq2.png" width="16px" height="16px" style="outline: none; border: none; text-decoration: none; padding-right: 7px;" /></a></td>
-                            <td><a target="_blank" href="https://twitter.com/stusim"><img src="https://res.cloudinary.com/dfvcq2b/image/upload/v1699288939/image-2_raeybe.png" width="16px" height="16px" style="outline: none; border: none; text-decoration: none; padding-right: 7px;" /></a></td>
+                            <td align="center"><a target="_blank" href="https://www.linkedin.com/in/simstuart"><img src="https://res.cloudinary.com/dfvcq2b/image/upload/v1699288939/image-1_vhaoq2.png" width="16px" height="16px" style="outline: none; border: none; text-decoration: none;" /></a></td>
+                            <td align="center"><a target="_blank" href="https://twitter.com/stusim"><img src="https://res.cloudinary.com/dfvcq2b/image/upload/v1699288939/image-2_raeybe.png" width="16px" height="16px" style="outline: none; border: none; text-decoration: none;" /></a></td>
                         </tr>
                     </tbody>
                 </table>
