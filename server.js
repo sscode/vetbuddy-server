@@ -8,21 +8,9 @@ const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails')
 const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
-const Stripe = require('stripe');
 
-// Initialize Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.cert({
-    // Add your Firebase Admin SDK credentials here
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-    privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),  
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-}),
-});
+
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 
 const app = express();
@@ -33,12 +21,9 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
-
-
 app.get('/api', async (req, res) => {
     res.send('API is running');
 });
-
 
 app.get('/stock', async (req, res) => {
   const baseUrl = 'https://api.iex.cloud/v1/data/core/historical_prices/';
