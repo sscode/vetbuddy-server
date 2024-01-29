@@ -9,7 +9,6 @@ const sgMail = require('@sendgrid/mail');
 const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
 const Stripe = require('stripe');
-const { fetchHistoricalStockData, combineQuotesWithPortfolios } = require('./api/stocks');
 
 // Initialize Firebase Admin SDK
 admin.initializeApp({
@@ -38,40 +37,6 @@ app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
     res.send('API is running');
-});
-
-app.post('/create-checkout-session', async (req, res) => {
-  const { uid } = req.body
-  // Create a Stripe customer with the UID as the description
-  const customer = await stripe.customers.create({
-    description: uid,
-  });
-
-  const session = await stripe.checkout.sessions.create({
-    customer: customer.id,
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'Annual Plan',
-          },
-          unit_amount: 2900,
-          recurring: {
-            interval: 'year',
-          }
-
-
-        },
-        quantity: 1,
-      },
-    ],
-    mode: 'subscription',
-    success_url: `https://www.finlister.com/success/${uid}`,
-    cancel_url: 'https://www.finlister.com/upgrade',
-  });
-
-  res.send({url: session.url});
 });
 
 
@@ -151,64 +116,6 @@ app.get('/testConnection', async (req, res) => {
   } catch (error) {
     console.error('Error connecting', error);
     res.status(500).send('Error connecting');
-  }
-});
-
-// Endpoint to fetch subcollections for a user
-app.get('/user/:userId', async (req, res) => {
-  try {
-    const userId = req.params.userId;
-
-    // Get references to the "portfolios" and "stocks" subcollections
-    const portfoliosCollection = admin.firestore().collection('users').doc(userId).collection('portfolios');
-    const stocksCollection = admin.firestore().collection('users').doc(userId).collection('stocks');
-
-    // Fetch portfolios with emailAlerts set to true
-    const portfoliosQuerySnapshot = await portfoliosCollection.where('emailAlerts', '==', true).get();
-    const portfoliosData = [];
-
-    // Iterate over portfolios with emailAlerts
-    for (const portfolioDoc of portfoliosQuerySnapshot.docs) {
-      const portfolioData = portfolioDoc.data();
-      portfolioData.stocks = [];
-
-      // Fetch associated stocks for this portfolio
-      const stocksQuerySnapshot = await stocksCollection.where('portfolioId', '==', portfolioDoc.id).get();
-      stocksQuerySnapshot.forEach((stockDoc) => {
-        const stockData = stockDoc.data();
-        // Include only basic information for each stock
-        portfolioData.stocks.push({ stock: stockData.stock, quantity: stockData.quantity });
-      });
-
-      // Include portfolio name and associated stocks in the response
-      if (portfolioData.stocks.length > 0) {
-        portfoliosData.push({ name: portfolioData.name, stocks: portfolioData.stocks });
-      }
-    }
-
-    // get unique stocks from portfolios
-    let uniqueStocks = [];
-    portfoliosData.forEach(portfolio => {
-      portfolio.stocks.forEach(stock => {
-        if(!uniqueStocks.includes(stock.stock)){
-          uniqueStocks.push(stock.stock);
-        }
-      })
-    })
-
-    // get stock quotes
-    const quoteFull = await fetchHistoricalStockData(uniqueStocks, '95d');
-
-    // // add stock quotes to portfoliosData
-    const portfolioDataTable = combineQuotesWithPortfolios(quoteFull, portfoliosData);
-
-    // Send the email
-    await sendEmail(portfolioDataTable, sgMail, 'stuartsim.aus+testing@gmail.com');
-
-    res.json('Email sent.');
-  } catch (error) {
-    console.error('Error fetching portfolios with alerts:', error);
-    res.status(500).send('Error fetching portfolios with alerts');
   }
 });
 
