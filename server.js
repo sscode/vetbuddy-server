@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 require('dotenv').config()
 const cors = require('cors');
 const fs = require('fs');
+const FormData = require('form-data');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
@@ -60,31 +61,37 @@ app.get('/generate-upload-url', async (req, res) => {
   }
 });
 
-app.get('/openvoice', async (req, res) => {
-  const fileKey = req.query.fileKey; // Assuming you pass the file key as a query parameter
-
-  // Generate a presigned URL
+app.post('/openvoice', async (req, res) => {
+  const fileKey = req.body.fileKey;
   const params = {
-    Bucket: 'vetbuddy',
-    Key: fileKey,
-    Expires: 60 // Expires in 60 seconds
+    Bucket: 'your-s3-bucket-name', // replace with your bucket name
+    Key: fileKey
   };
 
   try {
+    // Generate a presigned URL for the audio file
     const presignedUrl = s3.getSignedUrl('getObject', params);
 
-    console.log('Presigned URL: ', presignedUrl);
+    // Prepare FormData for OpenAI request
+    const formData = new FormData();
+    formData.append('file', presignedUrl);
+    formData.append('model', 'whisper-1');
 
-    const completion = await openai.audio.transcriptions.create({
-      model: "whisper-1",
-      audio: presignedUrl,
-    });
+    const openAIResponse = await axios.post(
+      'https://api.openai.com/v1/audio/transcriptions',
+      formData,
+      {
+        headers: {
+          ...formData.getHeaders(),
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+        },
+      }
+    );
 
-    // Send the transcription response back to the client
-    res.json(completion);
+    res.json(openAIResponse.data);
   } catch (error) {
     console.error(error);
-    res.status(500).send({ error: 'Error processing transcription' });
+    res.status(500).json({ message: 'Error processing transcription' });
   }
 });
 
