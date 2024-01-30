@@ -73,6 +73,8 @@ app.get('/openvoice', async (req, res) => {
   try {
     const presignedUrl = s3.getSignedUrl('getObject', params);
 
+    console.log('Presigned URL: ', presignedUrl);
+
     const completion = await openai.audio.transcriptions.create({
       model: "whisper-1",
       audio: presignedUrl,
