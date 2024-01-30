@@ -16,12 +16,11 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
+    "aws-sdk": "^2.1546.0",
     "cors": "^2.8.5",
     "dotenv": "^16.1.4",
     "express": "^4.18.2",
-    "firebase-admin": "^11.11.0",
     "nodemon": "^2.0.22",
-    "openai": "^4.26.0",
-    "stripe": "^14.3.0"
+    "openai": "^4.26.0"
   }
 }

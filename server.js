@@ -1,6 +1,7 @@
 //server.js
 const express = require('express');
 const axios = require('axios');
+const AWS = require('aws-sdk');
 require('dotenv').config()
 const cors = require('cors');
 const fs = require('fs');
@@ -13,6 +14,12 @@ const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: process.env.AWS_REGION
+});
+
 
 const app = express();
 const port = 5050;
@@ -24,6 +31,29 @@ app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
     res.send('API is running');
+});
+
+app.get('/generate-upload-url', async (req, res) => {
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME,
+    Key: `recordings/${Date.now()}.wav`, // File name you want to save as
+    ContentType: 'audio/wav'
+  };
+
+  try {
+    const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+    res.json({ uploadURL });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error creating upload URL' });
+  }
+});
+
+app.get('/openvoice', async (req, res) => {
+  const completion = await openai.audio.transcriptions.create({
+    model: "whisper-1",
+    audio: "https://whisper-1-openai-audio.s3-us-west-2.amazonaws.com/whisper-1-2021-10-30T05:34:44.000Z.wav",
+  });
 });
 
 app.get('/openai', async (req, res) => {
