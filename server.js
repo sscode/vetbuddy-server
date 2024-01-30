@@ -44,15 +44,16 @@ app.get('/testBuckets', async (req, res) => {
 });
 
 app.get('/generate-upload-url', async (req, res) => {
+  const key = `recordings/${Date.now()}.wav`;
   const params = {
     Bucket: 'vetbuddy',
-    Key: `recordings/${Date.now()}.wav`, // File name you want to save as
+    Key: key, // File name you want to save as
     ContentType: 'audio/wav'
   };
 
   try {
     const uploadURL = await s3.getSignedUrlPromise('putObject', params);
-    res.json({ uploadURL });
+    res.json({ uploadURL, key });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Error creating upload URL' });
