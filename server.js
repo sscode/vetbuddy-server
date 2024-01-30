@@ -20,7 +20,6 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION
 });
 
-
 const app = express();
 const port = 5050;
 
@@ -31,6 +30,17 @@ app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
     res.send('API is running');
+});
+
+app.get('/testBuckets', async (req, res) => {
+  try {
+    const data = await s3.listBuckets().promise();
+    console.log(data);
+    res.send(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Error listing buckets' });
+  }
 });
 
 app.get('/generate-upload-url', async (req, res) => {
