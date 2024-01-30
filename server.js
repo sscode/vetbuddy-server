@@ -40,8 +40,9 @@ app.get('/openai', async (req, res) => {
         "content": "Dog Owner: Good morning, Dr. VetGPT! This is Charlie, my Golden Retriever. We're here for his annual checkup.\n\nVetGPT: Good morning! It's great to see Charlie again. How has he been doing?\n\nDog Owner: He's been doing well, but I've noticed he's been scratching a lot more recently.\n\nVetGPT: I see. It could be allergies or a skin condition. I'll take a closer look. How about his eating and exercise habits?\n\nDog Owner: He's eating well, but I've been wondering if I'm giving him the right kind of food.\n\nVetGPT: Diet is very important. We'll discuss some nutrition options today. And exercise?\n\nDog Owner: We go for walks twice a day, but he seems to tire out more quickly now.\n\nVetGPT: Aging can affect their energy levels. We'll do a heart and lung check to ensure everything is okay. How about his teeth and gums?\n\nDog Owner: I try to brush them, but it's a struggle.\n\nVetGPT: Dental health is crucial for dogs. Let's examine his teeth, and I can show you some techniques for brushing.\n\nDog Owner: That would be helpful. Also, he's due for his vaccinations, right?\n\nVetGPT: Yes, we'll update his vaccinations today. It's also a good time to discuss flea and tick prevention.\n\nDog Owner: Oh, right. I want to make sure he's protected.\n\nVetGPT: Absolutely. After the examination, we'll talk about all the preventive care options. Any other concerns or questions?\n\nDog Owner: No, that's everything for now. Thanks for being so thorough, Dr. VetGPT!\n\nVetGPT: You're welcome! It's important for Charlie to have comprehensive care. Let's start with the examination now."
       },
     ],
-    model: "gpt-4",
+    model: "gpt-3.5-turbo",
   });
+
 
   res.send(completion);
 });
