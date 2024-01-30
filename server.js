@@ -35,7 +35,7 @@ app.get('/api', async (req, res) => {
 
 app.get('/generate-upload-url', async (req, res) => {
   const params = {
-    Bucket: process.env.S3_BUCKET_NAME,
+    Bucket: 'vetbuddy',
     Key: `recordings/${Date.now()}.wav`, // File name you want to save as
     ContentType: 'audio/wav'
   };
