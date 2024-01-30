@@ -64,7 +64,7 @@ app.get('/generate-upload-url', async (req, res) => {
 app.post('/openvoice', async (req, res) => {
   const fileKey = req.body.fileKey;
   const params = {
-    Bucket: 'your-s3-bucket-name', // replace with your bucket name
+    Bucket: 'vetbuddy', // replace with your bucket name
     Key: fileKey
   };
 
