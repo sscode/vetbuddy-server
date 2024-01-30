@@ -43,9 +43,13 @@ app.get('/openai', async (req, res) => {
     model: "gpt-3.5-turbo",
   });
 
+    // Accessing the 'content' from the first choice's message
+    const content = completion.choices[0].message.content;
 
-  res.send(completion);
-});
+    // Sending only the 'content' in the response
+    res.json({ text: content });
+    } 
+);
 
 
 app.get('/stock', async (req, res) => {
