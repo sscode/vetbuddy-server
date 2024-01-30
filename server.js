@@ -61,10 +61,29 @@ app.get('/generate-upload-url', async (req, res) => {
 });
 
 app.get('/openvoice', async (req, res) => {
-  const completion = await openai.audio.transcriptions.create({
-    model: "whisper-1",
-    audio: "https://whisper-1-openai-audio.s3-us-west-2.amazonaws.com/whisper-1-2021-10-30T05:34:44.000Z.wav",
-  });
+  const fileKey = req.query.fileKey; // Assuming you pass the file key as a query parameter
+
+  // Generate a presigned URL
+  const params = {
+    Bucket: 'vetbuddy',
+    Key: fileKey,
+    Expires: 60 // Expires in 60 seconds
+  };
+
+  try {
+    const presignedUrl = s3.getSignedUrl('getObject', params);
+
+    const completion = await openai.audio.transcriptions.create({
+      model: "whisper-1",
+      audio: presignedUrl,
+    });
+
+    // Send the transcription response back to the client
+    res.json(completion);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: 'Error processing transcription' });
+  }
 });
 
 app.get('/openai', async (req, res) => {
