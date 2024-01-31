@@ -47,7 +47,9 @@ app.get('/deepgram', async (req, res) => {
   try {
     const { result, error } = await deepgram.listen.prerecorded.transcribeUrl(
       { url: audioUrl },
-      { model: "nova" }
+      { model: "nova" },
+      { punctuate: true },
+      { smart_format: true}
     );
 
     if (error) {
