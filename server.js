@@ -93,7 +93,9 @@ app.get('/generate-upload-url', async (req, res) => {
 
 app.post('/openai', async (req, res) => {
   const rawTranscript = req.body.rawTranscript;
-  
+
+  console.log(rawTranscript);
+
   const completion = await openai.chat.completions.create({
     messages: [
       {
