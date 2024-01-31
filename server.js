@@ -9,6 +9,8 @@ const FormData = require('form-data');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
 
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
@@ -19,6 +21,13 @@ const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION
+});
+
+// Configure Cloudinary with your credentials
+cloudinary.config({ 
+  cloud_name: 'dfvcq2b', 
+  api_key: process.env.CLOUDINARY_API_KEY, 
+  api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
 const app = express();
@@ -44,6 +53,26 @@ app.get('/testBuckets', async (req, res) => {
   }
 });
 
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/uploadAudio', upload.single('file'), async (req, res) => {
+  const file = req.file;
+
+  try {
+    const result = await cloudinary.uploader.upload(file.path, {
+      resource_type: 'raw',
+      public_id: file.filename, // Optionally, set the public ID in Cloudinary
+    });
+
+    res.json({ url: result.secure_url });
+  } catch (error) {
+    console.error('Upload to Cloudinary failed:', error);
+    res.status(500).send('Error uploading file');
+  }
+});
+
+
+
 app.get('/generate-upload-url', async (req, res) => {
   const key = `recordings/${Date.now()}.wav`;
   const params = {
@@ -62,19 +91,12 @@ app.get('/generate-upload-url', async (req, res) => {
 });
 
 app.post('/openvoice', async (req, res) => {
-  const fileKey = req.body.fileKey;
-  const params = {
-    Bucket: 'vetbuddy', // replace with your bucket name
-    Key: fileKey
-  };
+  const audioUrl = req.body.url; // Using the public URL directly
 
   try {
-    // Generate a presigned URL for the audio file
-    const presignedUrl = s3.getSignedUrl('getObject', params);
-
     // Prepare FormData for OpenAI request
     const formData = new FormData();
-    formData.append('file', presignedUrl);
+    formData.append('file', audioUrl);
     formData.append('model', 'whisper-1');
 
     const openAIResponse = await axios.post(
@@ -90,7 +112,7 @@ app.post('/openvoice', async (req, res) => {
 
     res.json(openAIResponse.data);
   } catch (error) {
-    console.error(error);
+    console.error('Error processing transcription:', error);
     res.status(500).json({ message: 'Error processing transcription' });
   }
 });
