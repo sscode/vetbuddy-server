@@ -9,13 +9,14 @@ const FormData = require('form-data');
 const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
-const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
+const { createClient } = require("@deepgram/sdk");
 
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const deepgram = createClient(process.env.DEEPGRAM_SECRET);
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -23,12 +24,6 @@ const s3 = new AWS.S3({
   region: process.env.AWS_REGION
 });
 
-// Configure Cloudinary with your credentials
-cloudinary.config({ 
-  cloud_name: 'dfvcq2b', 
-  api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 const app = express();
 const port = 5050;
@@ -42,6 +37,31 @@ app.get('/api', async (req, res) => {
     res.send('API is running');
 });
 
+app.get('/deepgram', async (req, res) => {
+  const audioUrl = req.query.url; // Retrieve the URL from the query parameter
+
+  if (!audioUrl) {
+    return res.status(400).send('No URL provided');
+  }
+
+  try {
+    const { result, error } = await deepgram.listen.prerecorded.transcribeUrl(
+      { url: audioUrl },
+      { model: "nova" }
+    );
+
+    if (error) {
+      console.error(error);
+      return res.status(500).send(error);
+    }
+    
+    return res.send(result);
+  } catch (error) {
+    console.error('Error processing transcription:', error);
+    res.status(500).json({ message: 'Error processing transcription' });
+  }
+});
+
 app.get('/testBuckets', async (req, res) => {
   try {
     const data = await s3.listBuckets().promise();
@@ -52,25 +72,6 @@ app.get('/testBuckets', async (req, res) => {
     res.status(500).json({ error: 'Error listing buckets' });
   }
 });
-
-const upload = multer({ dest: 'uploads/' });
-
-app.post('/uploadAudio', upload.single('file'), async (req, res) => {
-  const file = req.file;
-
-  try {
-    const result = await cloudinary.uploader.upload(file.path, {
-      resource_type: 'raw',
-      public_id: file.filename, // Optionally, set the public ID in Cloudinary
-    });
-
-    res.json({ url: result.secure_url });
-  } catch (error) {
-    console.error('Upload to Cloudinary failed:', error);
-    res.status(500).send('Error uploading file');
-  }
-});
-
 
 
 app.get('/generate-upload-url', async (req, res) => {
