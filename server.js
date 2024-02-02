@@ -30,9 +30,7 @@ const port = 5050;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
+app.use(cors());
 app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
@@ -96,25 +94,27 @@ app.get('/generate-upload-url', async (req, res) => {
 app.post('/openai', async (req, res) => {
   const rawTranscript = req.body.rawTranscript;
 
-  const completion = await openai.chat.completions.create({
-    messages: [
-      {
-        "role": "system",
-        "content": "You are a helpful Veterinarian with expert knowledge on all types of animals. You will receive a transcript of a conversation between a vet and the owner of the pet. Your job is to turn the transcript into a consult that the vet can review.\n\nReview the transcript. Then create a consult write up which includes the following sections.\n\n\n1. Patient Information.\n2. Reason for Visit.\n3. History and Presenting Complaints.\n4. Physical Examination.\n5. Assessment and Plan.\n6. Additional Notes.\n7. Next Appointment. If there is any information missing, write that more information is needed."
-      },
-      {
-        "role": "user",
-        "content": rawTranscript,
-      },
-    ],
-    model: "gpt-3.5-turbo",
-  });
+  console.log(rawTranscript);
+
+  // const completion = await openai.chat.completions.create({
+  //   messages: [
+  //     {
+  //       "role": "system",
+  //       "content": "You are a helpful Veterinarian with expert knowledge on all types of animals. You will receive a transcript of a conversation between a vet and the owner of the pet. Your job is to turn the transcript into a consult that the vet can review.\n\nReview the transcript. Then create a consult write up which includes the following sections.\n\n\n1. Patient Information.\n2. Reason for Visit.\n3. History and Presenting Complaints.\n4. Physical Examination.\n5. Assessment and Plan.\n6. Additional Notes.\n7. Next Appointment. If there is any information missing, write that more information is needed."
+  //     },
+  //     {
+  //       "role": "user",
+  //       "content": rawTranscript,
+  //     },
+  //   ],
+  //   model: "gpt-3.5-turbo",
+  // });
 
     // Accessing the 'content' from the first choice's message
-    const content = completion.choices[0].message.content;
+    // const content = completion.choices[0].message.content;
 
     // Sending only the 'content' in the response
-    res.json({ text: content });
+    // res.json({ text: content });
     } 
 );
 
