@@ -92,9 +92,9 @@ app.get('/generate-upload-url', async (req, res) => {
 });
 
 app.post('/openai', async (req, res) => {
-  const rawTranscript = req.body.rawTranscript;
+  const transcript = req.body.transcript;
 
-  console.log(rawTranscript);
+  console.log(transcript);
 
   // const completion = await openai.chat.completions.create({
   //   messages: [
@@ -104,7 +104,7 @@ app.post('/openai', async (req, res) => {
   //     },
   //     {
   //       "role": "user",
-  //       "content": rawTranscript,
+  //       "content": transcript,
   //     },
   //   ],
   //   model: "gpt-3.5-turbo",
