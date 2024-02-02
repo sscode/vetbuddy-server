@@ -94,27 +94,29 @@ app.get('/generate-upload-url', async (req, res) => {
 app.post('/openai', async (req, res) => {
   const transcript = req.body.transcript;
 
-  console.log(transcript);
+  // console.log(transcript);
 
-  // const completion = await openai.chat.completions.create({
-  //   messages: [
-  //     {
-  //       "role": "system",
-  //       "content": "You are a helpful Veterinarian with expert knowledge on all types of animals. You will receive a transcript of a conversation between a vet and the owner of the pet. Your job is to turn the transcript into a consult that the vet can review.\n\nReview the transcript. Then create a consult write up which includes the following sections.\n\n\n1. Patient Information.\n2. Reason for Visit.\n3. History and Presenting Complaints.\n4. Physical Examination.\n5. Assessment and Plan.\n6. Additional Notes.\n7. Next Appointment. If there is any information missing, write that more information is needed."
-  //     },
-  //     {
-  //       "role": "user",
-  //       "content": transcript,
-  //     },
-  //   ],
-  //   model: "gpt-3.5-turbo",
-  // });
+  const completion = await openai.chat.completions.create({
+    messages: [
+      {
+        "role": "system",
+        "content": "You are a helpful Veterinarian with expert knowledge on all types of animals. You will receive a transcript of a conversation between a vet and the owner of the pet. Your job is to turn the transcript into a consult that the vet can review.\n\nReview the transcript. Then create a consult write up which includes the following sections.\n\n\n1. Patient Information.\n2. Reason for Visit.\n3. History and Presenting Complaints.\n4. Physical Examination.\n5. Assessment and Plan.\n6. Additional Notes.\n7. Next Appointment. If there is any information missing, write that more information is needed."
+      },
+      {
+        "role": "user",
+        "content": transcript,
+      },
+    ],
+    model: "gpt-3.5-turbo",
+  });
 
     // Accessing the 'content' from the first choice's message
-    // const content = completion.choices[0].message.content;
+    const content = completion.choices[0].message.content;
+
+    console.log(content);
 
     // Sending only the 'content' in the response
-    // res.json({ text: content });
+    res.json({ text: content });
     } 
 );
 
