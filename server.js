@@ -30,7 +30,9 @@ const port = 5050;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
@@ -93,8 +95,6 @@ app.get('/generate-upload-url', async (req, res) => {
 
 app.post('/openai', async (req, res) => {
   const rawTranscript = req.body.rawTranscript;
-
-  console.log(rawTranscript);
 
   const completion = await openai.chat.completions.create({
     messages: [
