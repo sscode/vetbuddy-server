@@ -10,6 +10,7 @@ const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails')
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
 const { createClient } = require("@deepgram/sdk");
+const textPrompt = require('./api/prompt');
 
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
@@ -100,7 +101,7 @@ app.post('/openai', async (req, res) => {
     messages: [
       {
         "role": "system",
-        "content": "You are a helpful Veterinarian with expert knowledge on all types of animals. You will receive a transcript of a conversation between a vet and the owner of the pet. Your job is to turn the transcript into a consult that the vet can review.\n\nReview the transcript. Then create a consult write up which includes the following sections.\n\n\n1. Patient Information.\n2. Reason for Visit.\n3. History and Presenting Complaints.\n4. Physical Examination.\n5. Assessment and Plan.\n6. Additional Notes.\n7. Next Appointment. If there is any information missing, write that more information is needed. Do not include anything is unrelated to the reason for the visit and does not provide any medical information about the animal."
+        "content": textPrompt,
       },
       {
         "role": "user",
@@ -121,45 +122,6 @@ app.post('/openai', async (req, res) => {
     res.json({ text: content });
     } 
 );
-
-
-app.get('/stock', async (req, res) => {
-  const baseUrl = 'https://api.iex.cloud/v1/data/core/historical_prices/';
-
-  const token = process.env.IEXCLOUD_API_KEY;
-
-  const { symbol, range } = req.query;
-
-  const response = await axios.get(`${baseUrl}${symbol}?range=${range}&token=${token}`);
-
-  res.send(response.data);
-});
-
-app.get('/stockDate', async (req, res) => {
-  const baseUrl = 'https://cloud.iexapis.com/stable/stock/';
-  // 'AAPL/chart/date/20211029?chartByDay=true&token=pk_12493ac929dc4aca8b9ca87d35fefc39';
-
-  const token = process.env.IEXCLOUD_API_KEY;
-
-  // const { symbol, date } = req.query;
-
-  const symbol = 'AAPL';
-  const date = '20210104';
-
-  const response = await axios.get(`${baseUrl}${symbol}/chart/date/${date}?chartByDay=true&token=${token}`);
-
-  res.send(response.data);
-});
-
-app.get('/sendWelcomeEmail', async (req, res) => {
-
-  const { email } = req.query;
-  // const email = 'stuartsim.aus+welcome@gmail.com'
-
-  await sendWelcomeEmail(sgMail, email);
-
-  res.send('Welcome email sent to ' + email);
-})
 
 
 app.get('/testConnection', async (req, res) => {
