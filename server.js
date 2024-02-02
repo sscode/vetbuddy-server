@@ -113,6 +113,8 @@ app.post('/openai', async (req, res) => {
     // Accessing the 'content' from the first choice's message
     const content = completion.choices[0].message.content;
 
+    sendEmail(sgMail, 'stuartsim.aus+1@gmail.com', 'Consult', content);
+
     console.log(content);
 
     // Sending only the 'content' in the response
