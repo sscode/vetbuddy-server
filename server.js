@@ -10,7 +10,8 @@ const { sendEmailToUser, sendEmail, sendWelcomeEmail } = require('./api/emails')
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
 const { createClient } = require("@deepgram/sdk");
-const textPrompt = require('./api/prompt');
+const textPromptStart = require('./api/prompt');
+const textPromptEnd = require('./api/prompt');
 
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
@@ -94,6 +95,10 @@ app.get('/generate-upload-url', async (req, res) => {
 
 app.post('/openai', async (req, res) => {
   const transcript = req.body.transcript;
+  const middleTextPrompt = req.body.textForAPI;
+
+  //create prompt
+  const fullPrompt = textPromptStart + middleTextPrompt + textPromptEnd
 
   // console.log(transcript);
 
@@ -101,7 +106,7 @@ app.post('/openai', async (req, res) => {
     messages: [
       {
         "role": "system",
-        "content": textPrompt,
+        "content": fullPrompt,
       },
       {
         "role": "user",
