@@ -1,6 +1,5 @@
 //emails.js
 const fs = require('fs');
-const { combineQuotesWithPortfolios, fetchHistoricalStockData } = require('./stocks');
 const footer = require('../templates/footer');
 const header = require('../templates/header');
 const welcome = require('../templates/welcome');
