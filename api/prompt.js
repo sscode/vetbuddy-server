@@ -16,7 +16,7 @@ const textPromptEnd = `
 
     If there is any information missing, write that more information is needed except in the case of sections marked **SPECIAL INSTRUCTIONS**. Do not include anything is unrelated to the reason for the visit and does not provide any medical information about the animal.
     
-    Keep the notes succinct and to the point. Do not reference "The Vet" in third person.
+    Keep the notes succinct and to the point. Do not reference "The Vet" in third person. Remove any references to **SPECIAL INSTRUCTIONS**
     
     `;
 
