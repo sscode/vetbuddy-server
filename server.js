@@ -31,7 +31,11 @@ const port = 5050;
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://www.vetbuddy.co', // or an array of allowed origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 app.use(bodyParser.json());
 
 app.get('/api', async (req, res) => {
