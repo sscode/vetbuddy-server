@@ -98,4 +98,4 @@ const welcome = require('../templates/welcome');
       return emailContent2;
     }
 
-  module.exports = { sendEmailToUser, sendEmail, sendWelcomeEmail };
+  module.exports = { sendEmail };
