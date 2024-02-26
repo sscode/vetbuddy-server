@@ -6,7 +6,6 @@ require('dotenv').config()
 const cors = require('cors');
 const fs = require('fs');
 const FormData = require('form-data');
-const { sendEmail, sendWelcomeEmail } = require('./api/emails');
 const sgMail = require('@sendgrid/mail');
 const bodyParser = require('body-parser');
 const { createClient } = require("@deepgram/sdk");
