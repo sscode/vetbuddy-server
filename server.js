@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const { createClient } = require("@deepgram/sdk");
 const textPromptStart = require('./api/prompt');
 const textPromptEnd = require('./api/prompt');
+const { sendEmail } = require('./api/emails');
 
 const OpenAI = require('openai').OpenAI;
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
