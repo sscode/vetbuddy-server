@@ -60,7 +60,7 @@ app.get('/deepgram', async (req, res) => {
       console.error(error);
       return res.status(500).send(error);
     }
-    
+    console.log('Deepgram successful')
     return res.send(result);
   } catch (error) {
     console.error('Error processing transcription:', error);
@@ -90,6 +90,7 @@ app.get('/generate-upload-url', async (req, res) => {
 
   try {
     const uploadURL = await s3.getSignedUrlPromise('putObject', params);
+    console.log('generate-upload-url success:', uploadURL);
     res.json({ uploadURL, key });
   } catch (err) {
     console.error(err);
@@ -125,7 +126,7 @@ app.post('/openai', async (req, res) => {
 
     sendEmail(sgMail, 'stuartsim.aus+1@gmail.com', 'Consult', content);
 
-    console.log(content);
+    console.log('openai success: ', content);
 
     // Sending only the 'content' in the response
     res.json({ text: content });
