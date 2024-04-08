@@ -66,8 +66,8 @@ app.get('/deepgram', async (req, res) => {
     console.log('Deepgram successful')
     return res.send(result);
   } catch (error) {
-    console.error('Error processing transcription:', error);
-    res.status(500).json({ message: 'Error processing transcription' });
+    console.error('Deepgram error processing transcription:', error);
+    res.status(500).json({ message: 'Deepgram Error processing transcription', error });
   }
 });
 
