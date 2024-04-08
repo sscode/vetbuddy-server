@@ -46,6 +46,9 @@ app.get('/api', async (req, res) => {
 app.get('/deepgram', async (req, res) => {
   const audioUrl = req.query.url; // Retrieve the URL from the query parameter
 
+  console.log('audioUrl:', audioUrl);
+
+
   if (!audioUrl) {
     return res.status(400).send('No URL provided');
   }
